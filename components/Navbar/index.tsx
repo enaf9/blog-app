@@ -8,7 +8,11 @@ import { Bars3Icon } from "@heroicons/react/24/outline"
 import { MobileMenu } from "../MobileMenu"
 import { NavMenu } from "../NavMenu"
 
-export const Navbar = () => {
+type NavbarProps = {
+  isAuthenticated: boolean
+}
+
+export const Navbar = ({ isAuthenticated }: NavbarProps) => {
   const [isMobileMenuOpen, setIseMobileMenuOpen] = useState(false)
 
   return (
@@ -20,9 +24,10 @@ export const Navbar = () => {
           className="fill-emerald-600"
           width={28}
           height={28}
+          priority={true}
         />
 
-        <NavMenu className="hidden sm:flex" />
+        <NavMenu className="hidden sm:flex" isAuthenticated={isAuthenticated} />
 
         <button
           onClick={() => setIseMobileMenuOpen(true)}

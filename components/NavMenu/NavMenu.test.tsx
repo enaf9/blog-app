@@ -18,11 +18,11 @@ const TEST_MENU_ITEMS = [
 
 describe("NavMenu", () => {
   it("renders NavMenu component", () => {
-    render(<NavMenu />)
+    render(<NavMenu isAuthenticated={false} />)
   })
 
   it("renders default menu items", () => {
-    render(<NavMenu />)
+    render(<NavMenu isAuthenticated={false} />)
 
     expect(screen.getByText("Recent articles")).toBeInTheDocument()
     expect(screen.getByText("About")).toBeInTheDocument()
@@ -30,7 +30,7 @@ describe("NavMenu", () => {
   })
 
   it("renders passed menu items as prop", () => {
-    render(<NavMenu menuItems={TEST_MENU_ITEMS} />)
+    render(<NavMenu isAuthenticated={false} menuItems={TEST_MENU_ITEMS} />)
 
     expect(screen.getByText("Home")).toBeInTheDocument()
     expect(screen.getByText("Articles")).toBeInTheDocument()
@@ -39,7 +39,7 @@ describe("NavMenu", () => {
   })
 
   it("highlights the active link based on the pathname", () => {
-    render(<NavMenu />)
+    render(<NavMenu isAuthenticated={false} />)
 
     expect(screen.getByText("Recent articles").closest("li")).toHaveClass(
       "text-teal-600",
@@ -53,11 +53,21 @@ describe("NavMenu", () => {
   it("calls the close function when a link is clicked", () => {
     const closeMock = jest.fn()
 
-    render(<NavMenu close={closeMock} />)
+    render(<NavMenu isAuthenticated={false} close={closeMock} />)
 
     const link = screen.getByText("Recent articles")
     fireEvent.click(link)
 
     expect(closeMock).toHaveBeenCalledTimes(1)
+  })
+
+  it("display correct menu items if user is logged in", () => {
+    const closeMock = jest.fn()
+
+    render(<NavMenu isAuthenticated={true} close={closeMock} />)
+
+    expect(screen.getByText("My articles")).toBeInTheDocument()
+    expect(screen.getByText("Create article")).toBeInTheDocument()
+    expect(screen.queryByText("Log in")).not.toBeInTheDocument()
   })
 })

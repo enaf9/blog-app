@@ -14,11 +14,11 @@ jest.mock("../MobileMenu", () => ({
 
 describe("Navbar", () => {
   it("renders Navbar", () => {
-    render(<Navbar />)
+    render(<Navbar isAuthenticated={false} />)
   })
 
   it("displays the logo image with correct src and alt text", () => {
-    render(<Navbar />)
+    render(<Navbar isAuthenticated={false} />)
 
     const logo = screen.getByAltText("Cat blog logo")
     expect(logo).toBeInTheDocument()
@@ -26,7 +26,7 @@ describe("Navbar", () => {
   })
 
   it("open the mobile menu when the Hamburger icon is clicked", () => {
-    render(<Navbar />)
+    render(<Navbar isAuthenticated={false} />)
 
     expect(screen.queryByText("Mocked MobileMenu")).not.toBeInTheDocument()
 
