@@ -1,11 +1,13 @@
 import axios from "axios"
+import Cookies from "js-cookie"
 
 const client = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api",
   headers: {
     "Content-Type": "application/json",
     "X-API-KEY": process.env.NEXT_PUBLIC_API_KEY,
-  },
+    Authorization: `Bearer ${Cookies.get("token")}`
+  }
 })
 
 client.interceptors.response.use(

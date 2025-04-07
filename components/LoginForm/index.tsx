@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { useLogin } from "@/hooks/useLogin"
+import { useLogin } from "@/hooks/authentication/useLogin"
 
 import { Button } from "../Button"
 import { InputField } from "../InputField"

@@ -7,10 +7,10 @@ import { LoginForm } from "@/components/LoginForm"
 
 const loginMock = jest.fn()
 
-jest.mock("../../hooks/useLogin", () => ({
+jest.mock("../../hooks/authentication/useLogin", () => ({
   useLogin: () => ({
-    login: loginMock,
-  }),
+    login: loginMock
+  })
 }))
 
 describe("LoginForm", () => {
@@ -36,8 +36,8 @@ describe("LoginForm", () => {
       useForm: ({}) => ({
         register: jest.fn(),
         handleSubmit: jest.fn(),
-        formState: { errors: [] },
-      }),
+        formState: { errors: [] }
+      })
     }))
 
     render(<LoginForm />)
@@ -51,7 +51,7 @@ describe("LoginForm", () => {
       expect(loginMock).toHaveBeenCalledTimes(1)
       expect(loginMock).toHaveBeenCalledWith({
         username: "testuser",
-        password: "password123",
+        password: "password123"
       })
     })
   })

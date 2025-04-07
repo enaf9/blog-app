@@ -1,19 +1,22 @@
 import { InputHTMLAttributes } from "react"
 
-type InputProps = {
+type TextAreaProps = {
   id: string
   label: string
   error?: string
-} & InputHTMLAttributes<HTMLInputElement>
+  rows?: number
+  cols?: number
+} & InputHTMLAttributes<HTMLTextAreaElement>
 
-export const InputField = ({
+export const TextArea = ({
   id,
   label,
-  type = "text",
   placeholder,
   error,
+  rows,
+  cols,
   ...rest
-}: InputProps) => {
+}: TextAreaProps) => {
   return (
     <div className="mb-4">
       <label
@@ -22,11 +25,12 @@ export const InputField = ({
       >
         {label}
       </label>
-      <input
+      <textarea
         id={id}
-        type={type}
         className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-slate-400 outline-none"
         placeholder={placeholder}
+        rows={rows}
+        cols={cols}
         {...rest}
       />
       <div className="mt-1 text-rose-700 text-sm">{error}</div>
