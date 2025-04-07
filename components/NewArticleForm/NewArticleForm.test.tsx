@@ -10,14 +10,6 @@ const createArticleMock = jest.fn()
 
 global.URL.createObjectURL = () => "imagePath"
 
-/* eslint-disable @next/next/no-img-element */
-jest.mock("next/image", () => ({
-  __esModule: true,
-  default: ({ src, alt }: { src: string; alt: string }) => (
-    <img src={src} alt={alt} />
-  )
-}))
-
 jest.mock("../../hooks/images/useUploadImage", () => ({
   useUploadImage: () => ({
     uploadImage: uploadImageMock
@@ -28,6 +20,10 @@ jest.mock("../../hooks/articles/useCreateArticle", () => ({
   useCreateArticle: () => ({
     createArticle: createArticleMock
   })
+}))
+
+jest.mock("next/navigation", () => ({
+  useRouter: jest.fn()
 }))
 
 describe("NewArticleForm", () => {
@@ -65,7 +61,7 @@ describe("NewArticleForm", () => {
   })
 
   it("submits the form with valid data", async () => {
-    const mockImageInfo = { imageId: "123" }
+    const mockImageInfo = [{ imageId: "123" }]
     uploadImageMock.mockImplementation((file, { onSuccess }) =>
       onSuccess(mockImageInfo)
     )
@@ -99,12 +95,15 @@ describe("NewArticleForm", () => {
     fireEvent.click(screen.getByRole("button", { name: "Publish Article" }))
 
     await waitFor(() => {
-      expect(createArticleMock).toHaveBeenCalledWith({
-        title: "Test Article",
-        perex: "This is a test article.",
-        content: "This is the article content.",
-        imageId: "123"
-      })
+      expect(createArticleMock).toHaveBeenCalledWith(
+        {
+          imageId: "123",
+          title: "Test Article",
+          perex: "This is a test article.",
+          content: "This is the article content."
+        },
+        { onSuccess: expect.any(Function) }
+      )
     })
   })
 
@@ -114,7 +113,7 @@ describe("NewArticleForm", () => {
     const mockImage = new File(["dummy content"], "image.jpg", {
       type: "image/jpeg"
     })
-    const mockImageInfo = { imageId: "123" }
+    const mockImageInfo = [{ imageId: "123" }]
     uploadImageMock.mockImplementation((file, { onSuccess }) =>
       onSuccess(mockImageInfo)
     )
@@ -131,12 +130,16 @@ describe("NewArticleForm", () => {
     await waitFor(() => {
       expect(uploadImageMock).toHaveBeenCalledTimes(1)
       expect(createArticleMock).toHaveBeenCalledTimes(1)
-      expect(createArticleMock).toHaveBeenCalledWith({
-        imageId: "123",
-        title: "Test Article",
-        perex: "Test Perex",
-        content: "Test content"
-      })
+
+      expect(createArticleMock).toHaveBeenCalledWith(
+        {
+          imageId: "123",
+          title: "Test Article",
+          perex: "Test Perex",
+          content: "Test content"
+        },
+        { onSuccess: expect.any(Function) }
+      )
     })
   })
 })

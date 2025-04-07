@@ -6,7 +6,8 @@ export const useUploadImage = () => {
   const mutation = useMutation({
     mutationFn: (image: File) => {
       const form = new FormData()
-      form.append("image", JSON.stringify(image))
+
+      form.append("image", image)
 
       return postImage(form)
     },

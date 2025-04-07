@@ -4,14 +4,6 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 
 import { FileInput } from "@/components/FileInput"
 
-/* eslint-disable @next/next/no-img-element */
-jest.mock("next/image", () => ({
-  __esModule: true,
-  default: ({ src, alt }: { src: string; alt: string }) => (
-    <img src={src} alt={alt} />
-  )
-}))
-
 global.URL.createObjectURL = () => "imagePath"
 
 describe("FileInput", () => {

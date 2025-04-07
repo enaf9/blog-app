@@ -1,7 +1,10 @@
 "use client"
 
+import { useRouter } from "next/navigation"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, FormProvider, useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { z } from "zod"
 
 import { NewArticleFormType } from "@/types/Article"
@@ -32,22 +35,33 @@ export const NewArticleForm = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-    control
+    control,
+    reset
   } = methods
+  const router = useRouter()
 
-  const { uploadImage } = useUploadImage()
-  const { createArticle } = useCreateArticle()
+  const { uploadImage, isPending: isUploadingImage } = useUploadImage()
+  const { createArticle, isPending } = useCreateArticle()
 
   const onSubmit = (data: NewArticleFormType) => {
     if (data.image) {
       uploadImage(data.image, {
         onSuccess: (responseData: ImageInfo) => {
-          createArticle({
-            imageId: responseData.imageId,
-            title: data.title,
-            perex: data.perex,
-            content: data.content
-          })
+          createArticle(
+            {
+              imageId: responseData[0].imageId,
+              title: data.title,
+              perex: data.perex,
+              content: data.content
+            },
+            {
+              onSuccess: () => {
+                reset()
+                router.push("/")
+                toast.success("Yor article was successfully added!")
+              }
+            }
+          )
         }
       })
     }
@@ -86,7 +100,12 @@ export const NewArticleForm = () => {
         </div>
         <MarkdownEditor />
         <div className="flex justify-end">
-          <Button onClick={handleSubmit(onSubmit)}>Publish Article</Button>
+          <Button
+            onClick={handleSubmit(onSubmit)}
+            disabled={isUploadingImage || isPending}
+          >
+            Publish Article
+          </Button>
         </div>
       </form>
     </FormProvider>

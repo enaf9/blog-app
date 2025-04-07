@@ -7,13 +7,13 @@ export const MarkdownEditor = () => {
   const {
     register,
     watch,
-    formState: { errors },
+    formState: { errors }
   } = useFormContext()
 
   const { content } = watch()
 
   return (
-    <div className="grid grid-cols-2 gap-8">
+    <div className="grid grid-cols-2 gap-8 max-h-[800px]">
       <TextArea
         id="content"
         label="Content"

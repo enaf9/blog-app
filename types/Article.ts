@@ -1,4 +1,5 @@
 import { Comment } from "./Comment"
+import { Pagination } from "./Pagination"
 
 export type Article = {
   articleId: string
@@ -7,6 +8,11 @@ export type Article = {
   imageId: string
   createdAt: string
   lastUpdatedAt: string
+}
+
+export type Articles = {
+  items: Article[]
+  pagination: Pagination
 }
 
 export type NewArticle = {

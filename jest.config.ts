@@ -9,7 +9,7 @@ import type { Config } from "jest"
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
-  dir: "./",
+  dir: "./"
 })
 
 const config: Config = {
@@ -100,6 +100,7 @@ const config: Config = {
   moduleNameMapper: {
     "react-markdown": "<rootDir>/__mocks__/ReactMarkdownMock.tsx",
     "remark-html": "<rootDir>/__mocks__/RemarkHtmlMock.ts",
+    "next/image": "<rootDir>/__mocks__/NextImageMock.tsx"
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -156,7 +157,7 @@ const config: Config = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment: "jsdom",
+  testEnvironment: "jsdom"
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
