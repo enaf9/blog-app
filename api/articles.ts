@@ -13,3 +13,9 @@ export const postArticle = async (body: NewArticlePayload) => {
 
   return response.data as ArticleDetail
 }
+
+export const deleteArticle = async (id: string) => {
+  const response = await client.delete(`/articles/${id}`)
+
+  return response.data
+}

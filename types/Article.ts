@@ -8,6 +8,7 @@ export type Article = {
   imageId: string
   createdAt: string
   lastUpdatedAt: string
+  author?: string
 }
 
 export type Articles = {

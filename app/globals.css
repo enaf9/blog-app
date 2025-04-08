@@ -18,3 +18,7 @@
     font: inherit;
   }
 }
+
+@utility btn {
+  @apply cursor-pointer rounded-lg bg-emerald-700 px-5 py-2 text-center font-semibold whitespace-nowrap text-white hover:bg-emerald-600;
+}
