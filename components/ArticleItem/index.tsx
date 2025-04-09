@@ -22,6 +22,7 @@ export const ArticleItem = ({ data }: ArticleItemProps) => {
             src={imageUrl}
             alt="Article image"
             fill={true}
+            sizes="100%"
             priority={true}
             className="object-cover object-center rounded-lg cursor-pointer"
           />

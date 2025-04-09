@@ -132,6 +132,7 @@ export const FileInput: React.FC<ImageInputProps> = ({
               src={preview}
               alt="Article image"
               fill={true}
+              sizes="100%"
               className="object-contain"
             />
 

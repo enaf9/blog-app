@@ -6,12 +6,12 @@ import { twMerge } from "tailwind-merge"
 
 const MENU_ITEMS = [
   { label: "Recent articles", href: "/" },
-  { label: "About", href: "/about" },
+  { label: "About", href: "/about" }
 ]
 
 const AUTHENTICATED_MENU_ITEMS = [
   { label: "My articles", href: "/my-articles" },
-  { label: "Create article", href: "/new-article" },
+  { label: "Create article", href: "/new-article" }
 ]
 
 type MenuItem = {
@@ -30,7 +30,7 @@ export const NavMenu = ({
   menuItems = MENU_ITEMS,
   className,
   close,
-  isAuthenticated,
+  isAuthenticated
 }: NavMenuProps) => {
   const pathname = usePathname()
 
@@ -38,7 +38,7 @@ export const NavMenu = ({
     <nav
       className={twMerge(
         "grid h-full w-full content-between items-center",
-        className,
+        className
       )}
     >
       <ul className="flex w-full flex-col  gap-5 font-medium sm:flex-row sm:gap-10">
@@ -83,7 +83,7 @@ export const NavMenu = ({
                 alt="Profile Photo"
                 fill={true}
                 priority={true}
-                sizes="2.25rem"
+                sizes="100%"
                 className="rounded-full object-cover object-center"
               />
             </div>

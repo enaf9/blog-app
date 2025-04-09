@@ -38,6 +38,7 @@ export const ArticleDetail = ({ id }: ArticleDetailProps) => {
             src={articleImageUrl}
             alt="Article image"
             fill={true}
+            sizes="100%"
             priority={true}
             className="object-cover object-center rounded-lg cursor-pointer"
           />

@@ -31,6 +31,7 @@ export const CommentItem = ({ data }: CommentItemProps) => {
             alt="Profile Photo"
             fill={true}
             priority={true}
+            sizes="100%"
             className="rounded-full object-cover object-center"
           />
         </div>
