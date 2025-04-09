@@ -69,12 +69,10 @@ describe("CommentItem", () => {
     expect(likeCommentMock).toHaveBeenCalledWith("1")
   })
 
-  test("calls dislikeComment when dislike button is clicked", async () => {
+  it("calls dislikeComment when dislike button is clicked", async () => {
     render(<CommentItem data={commentMock} />)
 
-    console.log(screen.getAllByRole("button").length)
     const dislikeButton = screen.getAllByRole("button")[1]
-    console.log(dislikeButton)
     await userEvent.click(dislikeButton)
 
     expect(dislikeCommentMock).toHaveBeenCalledTimes(1)

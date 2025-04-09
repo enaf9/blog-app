@@ -9,6 +9,7 @@ import { CommentSection } from "@/components/CommentSection"
 const articleMock = jest.fn()
 const addCommentMock = jest.fn()
 const isFetchingMock = jest.fn()
+const isAuthenticatedMock = jest.fn(() => true)
 
 const commentsMock: Comments = [
   {
@@ -51,6 +52,12 @@ jest.mock("../../hooks/comments/useAddComment", () => ({
   })
 }))
 
+jest.mock("../../hooks/authentication/useAuthentication", () => ({
+  useAuthentication: () => ({
+    isAuthenticated: isAuthenticatedMock
+  })
+}))
+
 jest.mock("../CommentList", () => ({
   CommentList: jest.fn(() => <div>Mocked CommentList</div>)
 }))
@@ -60,14 +67,14 @@ describe("CommentSection", () => {
     render(<CommentSection articleId="1" />)
   })
 
-  test("renders article comments list", () => {
+  it("renders article comments list", () => {
     articleMock.mockReturnValue(mockArticle)
     render(<CommentSection articleId="1" />)
 
     expect(screen.getByText("Mocked CommentList")).toBeInTheDocument()
   })
 
-  test("renders comment form", () => {
+  it("renders comment form", () => {
     render(<CommentSection articleId="1" />)
 
     expect(screen.getByAltText("Profile Photo")).toBeInTheDocument()
@@ -76,7 +83,7 @@ describe("CommentSection", () => {
     ).toBeInTheDocument()
   })
 
-  test("submits comment and calls addComment", async () => {
+  it("submits comment and calls addComment", async () => {
     render(<CommentSection articleId="1" />)
 
     const input = screen.getByPlaceholderText("Join the discussion")
@@ -94,11 +101,21 @@ describe("CommentSection", () => {
     })
   })
 
-  test("handles loading state when article is not available", () => {
+  it("handles loading state when article is not available", () => {
     isFetchingMock.mockReturnValue(true)
 
     render(<CommentSection articleId="1" />)
 
     expect(screen.getByTestId("loading")).toBeInTheDocument()
+  })
+
+  it("should not render comment form if not authenticated", () => {
+    isAuthenticatedMock.mockReturnValue(false)
+    render(<CommentSection articleId="1" />)
+
+    expect(screen.queryByAltText("Profile Photo")).not.toBeInTheDocument()
+    expect(
+      screen.queryByPlaceholderText("Join the discussion")
+    ).not.toBeInTheDocument()
   })
 })

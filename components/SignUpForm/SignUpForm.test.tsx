@@ -3,33 +3,29 @@ import "@testing-library/jest-dom"
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 
-import { LoginForm } from "@/components/LoginForm"
+import { SignUpForm } from "@/components/SignUpForm"
 
-const loginMock = jest.fn()
-
-jest.mock("../../hooks/authentication/useLogin", () => ({
-  useLogin: () => ({
-    login: loginMock
-  })
-}))
+const signUpMock = jest.fn()
 
 jest.mock("next/navigation")
 
-describe("LoginForm", () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
+jest.mock("../../hooks/tenants/useCreateTenant", () => ({
+  useCreateTenant: () => ({
+    createTenant: signUpMock
   })
+}))
 
-  it("renders LoginForm", () => {
-    render(<LoginForm />)
+describe("SignUpForm", () => {
+  it("renders SignUpForm", () => {
+    render(<SignUpForm />)
   })
 
   it("renders the form elements", () => {
-    render(<LoginForm />)
+    render(<SignUpForm />)
 
     expect(screen.getByLabelText("Username")).toBeInTheDocument()
     expect(screen.getByLabelText("Password")).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Log in" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Sign up" })).toBeInTheDocument()
   })
 
   it("calls login function on submit with valid data", async () => {
@@ -42,26 +38,29 @@ describe("LoginForm", () => {
       })
     }))
 
-    render(<LoginForm />)
+    render(<SignUpForm />)
 
     await userEvent.type(screen.getByLabelText("Username"), "testuser")
     await userEvent.type(screen.getByLabelText("Password"), "password123")
 
-    fireEvent.click(screen.getByRole("button", { name: "Log in" }))
+    fireEvent.click(screen.getByRole("button", { name: "Sign up" }))
 
     await waitFor(() => {
-      expect(loginMock).toHaveBeenCalledTimes(1)
-      expect(loginMock).toHaveBeenCalledWith({
-        username: "testuser",
-        password: "password123"
-      })
+      expect(signUpMock).toHaveBeenCalledTimes(1)
+      expect(signUpMock).toHaveBeenCalledWith(
+        {
+          name: "testuser",
+          password: "password123"
+        },
+        { onSuccess: expect.any(Function) }
+      )
     })
   })
 
   it("shows error messages when form is submitted with empty values", async () => {
-    render(<LoginForm />)
+    render(<SignUpForm />)
 
-    fireEvent.click(screen.getByRole("button", { name: "Log in" }))
+    fireEvent.click(screen.getByRole("button", { name: "Sign up" }))
 
     await waitFor(() => {
       expect(screen.getByText("Username is required")).toBeInTheDocument()

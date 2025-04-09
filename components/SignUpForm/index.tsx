@@ -1,42 +1,42 @@
 "use client"
 
-import { FormEvent } from "react"
 import { useRouter } from "next/navigation"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { z } from "zod"
 
-import { useLogin } from "@/hooks/authentication/useLogin"
+import { useCreateTenant } from "@/hooks/tenants/useCreateTenant"
 
 import { Button } from "../Button"
 import { InputField } from "../InputField"
 import { Loading } from "../Loading"
 
-const loginSchema = z.object({
-  username: z.string().min(1, "Username is required"),
+const newTenantSchema = z.object({
+  name: z.string().min(1, "Username is required"),
   password: z.string().min(1, "Password is required")
 })
 
-type LoginValues = z.infer<typeof loginSchema>
+type NewTenantValues = z.infer<typeof newTenantSchema>
 
-export const LoginForm = () => {
-  const { login, isPending } = useLogin()
+export const SignUpForm = () => {
   const router = useRouter()
+  const { createTenant, isPending } = useCreateTenant()
 
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<LoginValues>({ resolver: zodResolver(loginSchema) })
+  } = useForm<NewTenantValues>({ resolver: zodResolver(newTenantSchema) })
 
-  const onSubmit = (data: LoginValues) => {
-    login(data)
-  }
-
-  const handleSignUp = (e: FormEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    router.push("/registration")
+  const onSubmit = (data: NewTenantValues) => {
+    createTenant(data, {
+      onSuccess: () => {
+        router.push("/login")
+        toast.success("You were successfully registered! Now you can login!")
+      }
+    })
   }
 
   if (isPending) {
@@ -49,13 +49,13 @@ export const LoginForm = () => {
 
   return (
     <div className="max-w-96 p-10 rounded-lg shadow-lg mt-24 mx-auto">
-      <h3 className="text-2xl font-semibold mb-3">Log in</h3>
+      <h3 className="text-2xl font-semibold mb-3">Sign up</h3>
       <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
         <InputField
-          id="username"
+          id="name"
           label="Username"
-          {...register("username")}
-          error={errors.username?.message}
+          {...register("name")}
+          error={errors.name?.message}
         />
         <InputField
           id="password"
@@ -65,11 +65,8 @@ export const LoginForm = () => {
           error={errors.password?.message}
         />
 
-        <div className="grid gap-2">
-          <Button>Log in</Button>
-          <Button type="secondary" onClick={handleSignUp}>
-            Sign up
-          </Button>
+        <div className="grid">
+          <Button disabled={isPending}> Sign up</Button>
         </div>
       </form>
     </div>

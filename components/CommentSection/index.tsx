@@ -32,7 +32,6 @@ export const CommentSection = ({ articleId }: CommentSectionProps) => {
       author: "Jan Novak"
     })
   }
-  console.log("ehelele")
 
   if (isFetching) {
     return <Loading />
