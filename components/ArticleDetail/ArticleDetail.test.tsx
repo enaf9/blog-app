@@ -46,20 +46,20 @@ jest.mock("../../hooks/articles/useGetArticles", () => ({
   })
 }))
 
+jest.mock("../CommentSection", () => ({
+  CommentSection: jest.fn(() => {
+    console.log("sahkdhajksksahsjkahdjsa")
+    return <div>Mocked Comment section</div>
+  })
+}))
+
 describe("ArticleDetail", () => {
   beforeEach(() => {
-    jest.resetAllMocks()
+    jest.clearAllMocks()
   })
 
   it("renders ArticleDetail", () => {
     render(<ArticleDetail id="1" />)
-  })
-
-  it("should render loading state when data is fetching", () => {
-    isFetchingMock.mockReturnValue(true)
-    render(<ArticleDetail id="1" />)
-
-    expect(screen.getByTestId("loading")).toBeInTheDocument()
   })
 
   it("render article details", async () => {
@@ -82,6 +82,7 @@ describe("ArticleDetail", () => {
     expect(image).toHaveAttribute("src", "https://domain/img.jpg")
 
     expect(screen.getByText("Related Articles")).toBeInTheDocument()
+    expect(screen.getByText("Mocked Comment section")).toBeInTheDocument()
   })
 
   it("render related articles list correctly", async () => {
@@ -93,5 +94,12 @@ describe("ArticleDetail", () => {
         expect(screen.getByText(article.title)).toBeInTheDocument()
       })
     })
+  })
+
+  it("should render loading state when data is fetching", () => {
+    isFetchingMock.mockReturnValue(true)
+    render(<ArticleDetail id="1" />)
+
+    expect(screen.getByTestId("loading")).toBeInTheDocument()
   })
 })

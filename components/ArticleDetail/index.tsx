@@ -5,6 +5,7 @@ import Image from "next/image"
 import { useArticle } from "@/hooks/articles/useGetArticle"
 import { useArticles } from "@/hooks/articles/useGetArticles"
 
+import { CommentSection } from "../CommentSection"
 import { Loading } from "../Loading"
 import { MarkdownContent } from "../MarkdownContent"
 import { PageTitle } from "../PageTitle"
@@ -24,7 +25,7 @@ export const ArticleDetail = ({ id }: ArticleDetailProps) => {
   }
 
   return (
-    <div className="grid grid-cols-[2fr_1fr] gap-12 items-start">
+    <div className="grid grid-cols-[2fr_1fr] gap-12 items-start mb-8">
       <div>
         <PageTitle>{article?.title}</PageTitle>
         <div className="flex gap-4 my-6 text-sm text-slate-400 items-center ">
@@ -45,6 +46,8 @@ export const ArticleDetail = ({ id }: ArticleDetailProps) => {
         <div className="prose max-w-full mt-8">
           <MarkdownContent>{article?.content}</MarkdownContent>
         </div>
+
+        <CommentSection articleId={id} />
       </div>
       <RelatedArticles
         articles={articles || []}

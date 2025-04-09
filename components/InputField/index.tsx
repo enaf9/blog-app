@@ -2,7 +2,7 @@ import { InputHTMLAttributes } from "react"
 
 type InputProps = {
   id: string
-  label: string
+  label?: string
   error?: string
 } & InputHTMLAttributes<HTMLInputElement>
 
