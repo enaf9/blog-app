@@ -2,8 +2,14 @@ import { ArticleDetail, Articles, NewArticlePayload } from "@/types/Article"
 
 import client from "./client"
 
-export const getArticles = async () => {
-  const response = await client.get("/articles")
+export const getArticles = async ({
+  limit = 10,
+  offset = 0
+}: {
+  limit?: number
+  offset?: number
+}) => {
+  const response = await client.get(`/articles?limit=${limit}&offset=${offset}`)
 
   return response.data as Articles
 }

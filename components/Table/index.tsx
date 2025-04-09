@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import {
   ColumnDef,
@@ -14,13 +14,18 @@ type TableProps<T> = {
 }
 
 export const Table = <T,>({ columns, tableData }: TableProps<T>) => {
-  const [data] = useState(() => [...tableData])
+  const [data, setData] = useState(() => [...tableData])
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel()
   })
+
+  useEffect(() => {
+    setData(tableData)
+  }, [tableData])
+
   return (
     <div className="overflow-x-auto border border-slate-200 rounded-lg">
       <table className="w-full bg-white">

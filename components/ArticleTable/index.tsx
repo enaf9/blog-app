@@ -49,7 +49,13 @@ export const columns: Array<ColumnDef<Article & { actions: ReactNode }>> = [
 export const ArticleTable = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [articleToDelete, setArticleToDelete] = useState("")
-  const { articles, isFetching } = useArticles()
+  const {
+    articles,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useArticles()
 
   const { deleteArticle } = useDeleteArticle()
 
@@ -60,25 +66,40 @@ export const ArticleTable = () => {
 
   return (
     <div className="mt-12">
-      {isFetching ? (
+      {isFetching && !articles ? (
         <Loading />
       ) : (
-        <Table
-          columns={columns}
-          tableData={(articles ?? [])?.map(item => ({
-            ...item,
-            actions: (
-              <div className="flex gap-4">
-                <Link href={`/edit-article/${item.articleId}`}>
-                  <PencilIcon className="size-6" />
-                </Link>
-                <button onClick={() => handleDeleteArticle(item.articleId)}>
-                  <TrashIcon className="size-6 text-red-600 cursor-pointer" />
-                </button>
-              </div>
-            )
-          }))}
-        />
+        <>
+          <Table
+            columns={columns}
+            tableData={(articles ?? [])?.map(item => ({
+              ...item,
+              actions: (
+                <div className="flex gap-4">
+                  <Link href={`/edit-article/${item.articleId}`}>
+                    <PencilIcon className="size-6" />
+                  </Link>
+                  <button onClick={() => handleDeleteArticle(item.articleId)}>
+                    <TrashIcon className="size-6 text-red-600 cursor-pointer" />
+                  </button>
+                </div>
+              )
+            }))}
+          />
+          {isFetchingNextPage && <Loading />}
+
+          {hasNextPage && !isFetchingNextPage && (
+            <div className="flex justify-center mt-12">
+              <Button
+                type="secondary"
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+              >
+                Load next articles
+              </Button>
+            </div>
+          )}
+        </>
       )}
 
       {isDeleteModalOpen && (

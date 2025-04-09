@@ -1,14 +1,25 @@
 import { getArticles } from "@/api/articles"
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 
-export const useArticles = () => {
-  const query = useQuery({
+type ArticlesParams = {
+  limit?: number
+}
+
+export const useArticles = (params?: ArticlesParams) => {
+  const query = useInfiniteQuery({
     queryKey: ["articles"],
-    queryFn: getArticles,
+    queryFn: ({ pageParam = null }) =>
+      getArticles({ offset: pageParam || 0, limit: params?.limit || 10 }),
+    initialPageParam: 0,
+    getNextPageParam: lastPage =>
+      lastPage.pagination.offset + lastPage.pagination.limit <
+      lastPage.pagination.total
+        ? lastPage.pagination.offset + lastPage.pagination.limit
+        : undefined
   })
 
   return {
     ...query,
-    articles: query.data?.items,
+    articles: query.data?.pages.map(data => data.items).flat()
   }
 }
