@@ -10,14 +10,17 @@ export const useArticle = (id: string) => {
     enabled: !!id
   })
 
-  const { image, isFetching: imageIsFetching } = useImage(
-    query.data?.imageId || ""
-  )
+  const {
+    image,
+    imageUrl,
+    isFetching: imageIsFetching
+  } = useImage(query.data?.imageId || "")
 
   return {
     ...query,
     isFetching: query.isFetching || imageIsFetching,
     article: query.data,
-    articleImage: image
+    articleImage: image,
+    articleImageUrl: imageUrl
   }
 }

@@ -1,5 +1,4 @@
-import ReactMarkdown from "react-markdown"
-import remarkHtml from "remark-html"
+import { MarkdownContent } from "../MarkdownContent"
 
 type MarkdownPreviewProps = {
   content: string
@@ -12,7 +11,7 @@ export const MarkdownPreview = ({ content }: MarkdownPreviewProps) => {
         Preview
       </label>
       <div className="prose p-6 border border-slate-200 rounded-lg max-h-[740px] h-full mb-6 overflow-scroll">
-        <ReactMarkdown remarkPlugins={[remarkHtml]}>{content}</ReactMarkdown>
+        <MarkdownContent>{content}</MarkdownContent>
       </div>
     </div>
   )
