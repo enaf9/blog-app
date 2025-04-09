@@ -22,9 +22,9 @@ export type NewArticle = {
   content: string
 }
 
-export type NewArticleFormType = NewArticle & { image: File | null }
+export type NewArticleFormType = NewArticle & { image: File }
 
-export type NewArticlePayload = NewArticle & { imageId: string }
+export type NewArticlePayload = NewArticle & { imageId?: string }
 
 export type ArticleDetail = Article & {
   content: string

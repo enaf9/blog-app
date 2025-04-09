@@ -5,12 +5,13 @@ export const useImage = (id: string) => {
   const query = useQuery({
     queryKey: ["image", id],
     queryFn: () => getImage(id),
-    enabled: !!id
+    enabled: !!id && id !== "",
+    staleTime: Infinity
   })
 
   return {
     ...query,
-    image: query.data,
+    image: (query.data && new File([query.data], "ArticleImage")) as File,
     imageUrl: query.data && URL.createObjectURL(query.data)
   }
 }

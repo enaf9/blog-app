@@ -47,7 +47,7 @@ describe("NewArticleForm", () => {
     render(<NewArticleForm />)
   })
 
-  it("shows loading state when image is being created", async () => {
+  it("shows loading state when image is being uploaded", async () => {
     isPendingMock.mockReturnValue(true)
 
     render(<NewArticleForm />)

@@ -1,4 +1,10 @@
-import { DragEvent, FormEvent, InputHTMLAttributes, useState } from "react"
+import {
+  DragEvent,
+  FormEvent,
+  InputHTMLAttributes,
+  useEffect,
+  useState
+} from "react"
 import Image from "next/image"
 
 import { ArrowUpTrayIcon, TrashIcon } from "@heroicons/react/24/outline"
@@ -6,14 +12,15 @@ import { twMerge } from "tailwind-merge"
 
 type ImageInputProps = {
   label?: string
+  defaultImage?: File | null
   onFileChange: (file: File) => void
   onFileDelete: () => void
   accept?: string
   error?: string
 } & InputHTMLAttributes<HTMLInputElement>
 
-// Max size of file is 5MB
-const MAX_SIZE = 5 * 1024 * 1024
+// Max size of file is 1MB
+const MAX_SIZE = 1 * 1024 * 1024
 
 export const FileInput: React.FC<ImageInputProps> = ({
   label,
@@ -21,10 +28,17 @@ export const FileInput: React.FC<ImageInputProps> = ({
   onFileDelete,
   error,
   accept,
+  defaultImage
 }) => {
   const [preview, setPreview] = useState<string | null>(null)
   const [formError, setFormError] = useState<string | null>(null)
   const [dragActive, setDragActive] = useState(false)
+
+  useEffect(() => {
+    if (defaultImage) {
+      setPreview(URL.createObjectURL(defaultImage))
+    }
+  }, [defaultImage])
 
   const handleFileChange = (e: FormEvent<HTMLInputElement>) => {
     const file = (e.target as HTMLInputElement).files?.[0]
@@ -60,7 +74,7 @@ export const FileInput: React.FC<ImageInputProps> = ({
   const validateImage = (selectedFile: File) => {
     if (selectedFile.size > MAX_SIZE) {
       setFormError(
-        `File size exceeds the maximum limit of ${MAX_SIZE / 1024 / 1024}MB`,
+        `File size exceeds the maximum limit of ${MAX_SIZE / 1024 / 1024}MB`
       )
       setPreview(null)
       return
@@ -104,7 +118,7 @@ export const FileInput: React.FC<ImageInputProps> = ({
         className={twMerge(
           "h-72 border border-dashed border-emerald-700 rounded-lg flex flex-col gap-2 items-center justify-center max-w-xl w-full p-2",
           dragActive && "border-2",
-          preview && "border-solid border-slate-300",
+          preview && "border-solid border-slate-300"
         )}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -117,8 +131,8 @@ export const FileInput: React.FC<ImageInputProps> = ({
             <Image
               src={preview}
               alt="Article image"
-              layout="fill"
-              objectFit="contain"
+              fill={true}
+              className="object-contain"
             />
 
             <div className="absolute bottom-0 right-0 flex gap-2 text-white">

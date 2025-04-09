@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 
+import { getQueryClient } from "@/app/providers"
 import { toast } from "sonner"
 
 import { NewArticleFormType } from "@/types/Article"
@@ -14,6 +15,7 @@ import { ArticleForm } from "../ArticleForm"
 
 export const NewArticleForm = () => {
   const router = useRouter()
+  const queryClient = getQueryClient()
 
   const { uploadImage, isPending: isUploadingImage } = useUploadImage()
   const { createArticle, isPending } = useCreateArticle()
@@ -31,6 +33,7 @@ export const NewArticleForm = () => {
             },
             {
               onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ["articles"] })
                 router.push("/")
                 toast.success("Your article was successfully added!")
               }

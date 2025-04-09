@@ -80,7 +80,7 @@ describe("FileInput", () => {
       .closest("input") as HTMLInputElement
 
     const largeFile = new File(
-      [new ArrayBuffer(6 * 1024 * 1024)],
+      [new ArrayBuffer(2 * 1024 * 1024)],
       "large-image.jpg",
       { type: "image/jpeg" }
     )
@@ -88,7 +88,7 @@ describe("FileInput", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText("File size exceeds the maximum limit of 5MB")
+        screen.getByText("File size exceeds the maximum limit of 1MB")
       ).toBeInTheDocument()
     })
   })

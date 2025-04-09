@@ -17,25 +17,35 @@ import { InputField } from "../InputField"
 import { MarkdownEditor } from "../MarkdownEditor"
 import { TextArea } from "../TextArea"
 
+const INIT_DATA = {
+  title: "",
+  perex: "",
+  content: "",
+  image: {} as File
+}
+
 type ArticleForm = {
   submitAction: SubmitHandler<NewArticleFormType>
   buttonText?: string
   isLoading?: boolean
+  defaultData?: NewArticleFormType
 }
 
 const articleSchema = z.object({
   title: z.string().min(1, "Title is required"),
   perex: z.string().min(1, "Perex is required"),
   content: z.string().min(1, "Content is required"),
-  image: z.instanceof(File, { message: "Image is required" }).nullable()
+  image: z.instanceof(File, { message: "Image is required" })
 })
 
 export const ArticleForm = ({
   isLoading,
   buttonText,
+  defaultData,
   submitAction
 }: ArticleForm) => {
-  const methods = useForm<NewArticleFormType>({
+  const methods = useForm({
+    values: defaultData || INIT_DATA,
     resolver: zodResolver(articleSchema)
   })
   const {
@@ -71,8 +81,9 @@ export const ArticleForm = ({
                 label="Featured image"
                 accept="image/jpeg,image/jpg,image/png,image/heic"
                 onFileChange={file => field.onChange(file)}
-                onFileDelete={() => setValue("image", null)}
+                onFileDelete={() => setValue("image", {} as File)}
                 error={errors.image?.message}
+                defaultImage={defaultData?.image}
               />
             )}
           />

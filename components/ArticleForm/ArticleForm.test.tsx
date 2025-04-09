@@ -68,10 +68,6 @@ describe("ArticleForm", () => {
 
     await userEvent.click(screen.getByText("Publish Article"))
 
-    fireEvent.change(fileInput, { target: { files: [file] } })
-
-    fireEvent.click(screen.getByRole("button", { name: "Publish Article" }))
-
     await waitFor(() => {
       expect(submitActionMock).toHaveBeenCalledWith(
         {
@@ -112,5 +108,28 @@ describe("ArticleForm", () => {
         expect.any(Object)
       )
     })
+  })
+
+  it("display default data in the form ", async () => {
+    const defaultData = {
+      title: "Article Title",
+      perex: "Article Perex",
+      content: "Article content",
+      image: new File(["content"], "image.jpg", { type: "image/jpeg" })
+    }
+
+    render(
+      <ArticleForm submitAction={submitActionMock} defaultData={defaultData} />
+    )
+
+    const titleInput = screen.getByLabelText(
+      "Article title"
+    ) as HTMLInputElement
+    const perexInput = screen.getByLabelText("Perex") as HTMLInputElement
+    const contentInput = screen.getByLabelText("Content") as HTMLInputElement
+
+    expect(titleInput.value).toBe("Article Title")
+    expect(perexInput.value).toBe("Article Perex")
+    expect(contentInput.value).toBe("Article content")
   })
 })
